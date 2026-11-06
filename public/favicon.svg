@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="16" fill="#F8CB46" />
+  <!-- stylized b -->
+  <path d="M22 14v36h11c7.732 0 14-6.268 14-14 0-5.836-3.572-10.835-8.665-12.923C36.425 21.848 34.301 21 32 21h-3v-7h-7zm7 14h3c3.866 0 7 3.134 7 7s-3.134 7-7 7h-3V28z" fill="#0C831F" />
+  <!-- lightning accent -->
+  <polygon points="46,12 38,25 43,25 36,36 49,21 43,21" fill="#0C831F" />
+</svg>

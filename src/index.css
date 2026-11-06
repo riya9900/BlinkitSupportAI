@@ -1,0 +1,160 @@
+/* Blinkit Support Design System: Modern Quick-Commerce Theme */
+:root {
+  /* Brand Colors */
+  --blinkit-yellow: #f8cb46;
+  --blinkit-yellow-light: #fff5c0;
+  --blinkit-yellow-hover: #e6b800;
+  --blinkit-green: #0c831f;
+  --blinkit-green-dark: #096317;
+  --blinkit-green-light: #ebf8ee;
+  --blinkit-green-glow: rgba(12, 131, 31, 0.18);
+  --blinkit-green-accent: #25a541;
+
+  /* Neutrals & Surfaces */
+  --bg-page: #f4f6f5;
+  --bg-gradient: linear-gradient(180deg, #f9fbf9 0%, #edf2ee 100%);
+  --surface-white: #ffffff;
+  --surface-subtle: #f8faf8;
+  --surface-tint: #f0f5f1;
+  --border-light: #e2e8f0;
+  --border-subtle: #e9ecef;
+  --border-green: #d1fae5;
+
+  /* Typography Colors */
+  --text-main: #111827;
+  --text-body: #374151;
+  --text-muted: #6b7280;
+  --text-subtle: #9ca3af;
+  --text-inverse: #ffffff;
+
+  /* Chat Specific */
+  --user-bubble-bg: linear-gradient(135deg, #0c831f 0%, #096a19 100%);
+  --user-bubble-text: #ffffff;
+  --ai-bubble-bg: #ffffff;
+  --ai-bubble-border: #e2e8f0;
+  --ai-bubble-shadow: 0 4px 20px -2px rgba(12, 131, 31, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+
+  /* Feedback Colors */
+  --error-bg: #fef2f2;
+  --error-border: #fecaca;
+  --error-text: #991b1b;
+  --warning-bg: #fffbeb;
+  --warning-text: #b45309;
+  --success-bg: #ecfdf5;
+  --success-text: #065f46;
+
+  /* Shadows & Rings */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 10px 25px -4px rgba(12, 131, 31, 0.07), 0 4px 10px -2px rgba(0, 0, 0, 0.03);
+  --shadow-elevated: 0 20px 30px -10px rgba(0, 0, 0, 0.08), 0 8px 15px -4px rgba(12, 131, 31, 0.06);
+  --focus-ring: 0 0 0 3px rgba(12, 131, 31, 0.25);
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: #0d1510;
+    --bg-gradient: linear-gradient(180deg, #101a13 0%, #0a110d 100%);
+    --surface-white: #152219;
+    --surface-subtle: #19291e;
+    --surface-tint: #1c3022;
+    --border-light: #243a2b;
+    --border-subtle: #1e3124;
+    --border-green: #2a4733;
+
+    --text-main: #f3f6f4;
+    --text-body: #e2e8e4;
+    --text-muted: #95a89b;
+    --text-subtle: #6c8072;
+
+    --user-bubble-bg: linear-gradient(135deg, #15803d 0%, #0f642e 100%);
+    --ai-bubble-bg: #152219;
+    --ai-bubble-border: #243a2b;
+    --ai-bubble-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+
+    --error-bg: #2d1414;
+    --error-border: #4d1f1f;
+    --error-text: #fca5a5;
+    --warning-bg: #2d2010;
+    --warning-text: #fcd34d;
+    --success-bg: #102d1d;
+    --success-text: #86efac;
+
+    --shadow-card: 0 10px 25px -4px rgba(0, 0, 0, 0.4);
+    --shadow-elevated: 0 20px 30px -10px rgba(0, 0, 0, 0.5);
+    --focus-ring: 0 0 0 3px rgba(37, 165, 65, 0.35);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-page);
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+button,
+textarea,
+input {
+  font-family: inherit;
+  color: inherit;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-subtle);
+}
+
+/* Accessibility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
