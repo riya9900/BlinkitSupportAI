@@ -2,7 +2,7 @@
 
 An AI-powered customer support chatbot inspired by Blinkit, designed to make online grocery shopping support easier, faster, and more convenient.
 
-🚀 **Live Demo:** [https://blinkit-support-ai.vercel.app/](https://blinkit-support-ai.vercel.app/)
+🚀 **Live Demo:** [Visit Blinkit Support AI](https://blinkit-support-ai.vercel.app/)
 
 Blinkit Support AI helps customers track their orders, search for products, request refunds, register complaints, and connect with human support through a simple conversational interface.
 
