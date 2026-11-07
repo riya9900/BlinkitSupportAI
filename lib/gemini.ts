@@ -3,7 +3,9 @@
 import { GoogleGenAI, type Content } from '@google/genai';
 import type { GenerateFn, ModelTurn } from './agent.js';
 import { toolDeclarations } from './agentTools.js';
+import { readEnv } from './env.js';
 import { HttpError } from './http.js';
+import { logError } from './log.js';
 import { SYSTEM_PROMPT } from './systemPrompt.js';
 
 // Any Gemini model that supports function calling works. Override with GEMINI_MODEL.
@@ -17,9 +19,12 @@ let lastRequestAt = 0;
 
 function getClient(): GoogleGenAI {
   if (!client) {
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = readEnv('GEMINI_API_KEY');
     if (!apiKey) throw new Error('Missing environment variable GEMINI_API_KEY. See .env.example.');
-    client = new GoogleGenAI({ apiKey });
+    // Stop waiting on Gemini before Vercel's 30s function limit, so a slow call becomes a
+    // logged error instead of a silent 504.
+    const timeout = Number.parseInt(process.env.GEMINI_TIMEOUT_MS ?? '', 10);
+    client = new GoogleGenAI({ apiKey, httpOptions: { timeout: Number.isInteger(timeout) && timeout > 0 ? timeout : 15000 } });
   }
   return client;
 }
@@ -41,6 +46,16 @@ async function respectMinInterval(): Promise<void> {
 export function geminiErrorStatus(err: unknown): number | undefined {
   const status = (err as { status?: unknown } | null)?.status;
   return typeof status === 'number' ? status : undefined;
+}
+
+// Plain-English hint for the server log: which setting to check for each kind of failure.
+export function geminiHint(status: number | undefined): string {
+  if (status === undefined) return 'No HTTP status: network problem or timeout while calling Gemini.';
+  if (status === 400) return 'Gemini rejected the request. Most common cause: GEMINI_API_KEY is invalid (extra spaces or quotes?) or GEMINI_MODEL is wrong.';
+  if (status === 401 || status === 403) return 'Gemini rejected the API key. Check GEMINI_API_KEY is a valid, unrestricted key from aistudio.google.com.';
+  if (status === 404) return 'Gemini model not found. Check GEMINI_MODEL.';
+  if (status === 429) return 'Gemini quota or rate limit reached.';
+  return 'Gemini-side problem (5xx).';
 }
 
 // What we tell OUR client when Gemini fails for good (details stay in the logs).
@@ -73,7 +88,12 @@ export const generateWithGemini: GenerateFn = async (contents: Content[]): Promi
       break;
     } catch (err) {
       const status = geminiErrorStatus(err);
-      console.error(`Gemini request failed (attempt ${attempt}, status ${status}):`, err instanceof Error ? err.message.slice(0, 300) : err);
+      logError('gemini.request_failed', err, {
+        attempt,
+        status,
+        model: process.env.GEMINI_MODEL || DEFAULT_MODEL,
+        hint: geminiHint(status),
+      });
       // Retry only temporary server-side problems, never rate limits (retrying
       // a 429 immediately just fails again and wastes the serverless time budget).
       if (status !== undefined && RETRYABLE_STATUSES.has(status) && attempt < MAX_ATTEMPTS) {

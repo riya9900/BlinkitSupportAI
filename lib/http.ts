@@ -1,4 +1,5 @@
 // Small helpers shared by every /api endpoint.
+import { logError } from './log.js';
 
 // An error we deliberately throw to send a specific status code to the client.
 export class HttpError extends Error {
@@ -62,13 +63,15 @@ export function handle(fn: (request: Request) => Promise<Response>) {
       return await fn(request);
     } catch (err) {
       if (err instanceof HttpError) {
+        // 4xx are the visitor's mistakes; 5xx are ours and must leave a trace in the logs.
+        if (err.status >= 500) logError('api.http_error', err, { status: err.status, code: err.code });
         return json(
           err.code ? { error: err.message, code: err.code } : { error: err.message },
           err.status,
           err.retryAfter !== undefined ? { 'Retry-After': String(err.retryAfter) } : {},
         );
       }
-      console.error('Unexpected error:', err);
+      logError('api.unexpected_error', err, { path: new URL(request.url).pathname });
       return json({ error: 'Something went wrong on our side. Please try again.' }, 500);
     }
   };

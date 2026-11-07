@@ -1,14 +1,25 @@
 // Loads FAKE sample data into MongoDB.
 // Run:   npm run seed             (only works on an empty database)
 //        npm run seed -- --reset  (deletes existing data in the 6 collections first)
+//
+// SAFETY: every run (with or without --reset) refuses unless MONGODB_DB is explicitly set to a
+// local/test/dev database and the database we really connected to has that same name.
 import { closeDb, collections, ensureIndexes, getDb } from '../lib/db.js';
+import { readEnv } from '../lib/env.js';
 import { customers, orders, products, refunds } from './seedData.js';
+import { assertSeedAllowed } from './testOrderTools.js';
 
 const reset = process.argv.includes('--reset');
 
 async function main() {
+  // SAFETY, check 1: look at the setting BEFORE even connecting.
+  assertSeedAllowed(readEnv('MONGODB_DB'));
+
   const db = await getDb();
   console.log(`Connected. Database: "${db.databaseName}"`);
+  // SAFETY, check 2: the database we really connected to must be the one MONGODB_DB names.
+  // Nothing below (counting, deleting, inserting) runs unless this passes.
+  assertSeedAllowed(readEnv('MONGODB_DB'), db.databaseName);
 
   const names = ['customers', 'orders', 'products', 'refunds', 'queries', 'handoffs'];
   const counts: Record<string, number> = {};
