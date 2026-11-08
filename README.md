@@ -2,7 +2,7 @@
 
 An AI-powered customer support chatbot inspired by Blinkit that makes grocery shopping support faster and easier.
 
-🚀 **Live Demo:** [Visit Blinkit Support AI](https://blinkit-support-ai.vercel.app/)
+🔗 **Live demo:** https://blinkit-support-ai.vercel.app/
 
 ### ✨ Features
 - **Order Tracking:** Check order status and details.
@@ -11,6 +11,7 @@ An AI-powered customer support chatbot inspired by Blinkit that makes grocery sh
 - **Customer Complaints:** Register complaints and queries.
 - **Human Support:** Connect with support agents.
 - **AI Chatbot:** Get instant AI-powered assistance.
+- Replies in English, Hindi and Hinglish
 
 ### 🛠️ Tech Stack
 React, TypeScript, CSS, Node.js, MongoDB, Google Gemini AI, Vite, and Vercel.
